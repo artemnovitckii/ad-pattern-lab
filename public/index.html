@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ad Pattern Lab · Jev for marketers</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/"
+        ><i></i> Ad Pattern Lab <span>/ powered by Jev</span></a
+      >
+      <div class="top-status">
+        <span class="dot"></span><span id="modeBadge">SIMULATED RUN</span
+        ><span id="timer">00:00</span
+        ><button id="clean" title="Hide controls (C)">Clean view ↗</button>
+      </div>
+    </header>
+    <div class="controls">
+      <div class="modes" role="group" aria-label="Data mode">
+        <button data-mode="demo" class="active">01 Simulation</button
+        ><button data-mode="import">02 Import ads</button
+        ><button data-mode="collect">03 Meta collection</button>
+      </div>
+      <div class="playback">
+        <label
+          >Replay
+          <select id="duration">
+            <option value="20">20 seconds</option>
+            <option value="40" selected>40 seconds</option>
+            <option value="80">80 seconds</option>
+          </select></label
+        ><button id="restart" title="Restart (R)">↺</button
+        ><button id="play" class="primary">▶ Play simulation</button
+        ><button id="record">Portrait</button
+        ><button id="export">Export</button>
+      </div>
+    </div>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">COMPETITOR CREATIVE → YOUR NEXT BRIEF</p>
+        <h1>
+          Find the pattern.<br class="mobile" />
+          Make your next ad.
+        </h1>
+      </div>
+      <p id="context">
+        A fictional haircare market. One connected simulation.<br />No API keys.
+        No real campaign results.
+      </p>
+    </section>
+    <div id="workflow" hidden>
+      <div id="importPanel">
+        <h2>Bring your own evidence.</h2>
+        <p>
+          Paste ad copy, import a JSON array, or upload images / videos. OCR
+          runs locally. Jev needs your key.
+        </p>
+        <div class="formrow">
+          <label
+            >Brand<input
+              id="adBrand"
+              placeholder="Your brand or advertiser" /></label
+          ><label class="grow"
+            >Ad copy<textarea
+              id="adText"
+              placeholder="Paste the ad's words here…"
+            ></textarea></label
+          ><button id="addText">Import copy</button>
+        </div>
+        <div class="formrow">
+          <label
+            >JSON import<input
+              id="jsonFile"
+              type="file"
+              accept=".json,application/json" /></label
+          ><label
+            >Image / video uploads<input
+              id="mediaFile"
+              type="file"
+              accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime"
+              multiple /></label
+          ><button id="analyze" class="primary">
+            Analyze / retry unfinished
+          </button>
+        </div>
+        <p class="hint">
+          Video needs FFmpeg. Add Fireworks or Groq for speech. Without visual
+          observations, visual format can remain unknown. Importing JSON or text
+          replaces the current local batch; export it first if needed.
+        </p>
+      </div>
+      <div id="collectPanel" hidden>
+        <h2>Collect public Meta ads.</h2>
+        <p>
+          Uses your Apify account. This connector is beta and has not been
+          verified against a paid live run.
+        </p>
+        <label
+          >Ad Library or Facebook page URLs, one per line<textarea
+            id="urls"
+            placeholder="https://www.facebook.com/ads/library/?…"
+          ></textarea>
+        </label>
+        <div class="formrow">
+          <label
+            >Maximum ads<input
+              id="limit"
+              type="number"
+              min="1"
+              max="1000"
+              value="50" /></label
+          ><label
+            >Apify spend cap ($)<input
+              id="budget"
+              type="number"
+              min=".01"
+              max="20"
+              step=".01"
+              value="1" /></label
+          ><button id="collect" class="primary">Start paid collection</button
+          ><button id="collectAnalyze">Analyze collected ads</button>
+        </div>
+        <p class="hint">
+          Apify's cap excludes AI costs. Collection does not automatically
+          launch AI analysis. An uncertain start must be checked in Apify
+          Console before another run.
+        </p>
+        <div class="formrow">
+          <label class="grow"
+            >Existing Apify run ID<input
+              id="runId"
+              placeholder="Attach or resume a run instead of paying to restart" /></label
+          ><button id="attach">Load existing run</button>
+        </div>
+      </div>
+      <details>
+        <summary>Your product → original briefs</summary>
+        <div class="formrow">
+          <label
+            >Product name<input
+              id="product"
+              placeholder="Product name" /></label
+          ><label
+            >Audience<input id="audience" placeholder="Who is this for?"
+          /></label>
+        </div>
+        <label
+          >Verified product facts<textarea
+            id="facts"
+            placeholder="Only facts you can support. The writer should not borrow competitors' claims."
+          ></textarea></label
+        ><label
+          >Actual offer<input
+            id="offer"
+            placeholder="Your actual offer, or leave blank" /></label
+        ><button id="briefs">Create up to 6 briefs</button>
+        <p class="hint">
+          Without a configured writer, this creates editable outlines. Jev
+          review scores are rubric judgments, not predicted performance.
+        </p>
+      </details>
+      <p id="connections"></p>
+      <details>
+        <summary>Run activity & errors</summary>
+        <pre id="activity"></pre>
+      </details>
+    </div>
+    <main class="dashboard">
+      <section class="panel wall-panel">
+        <div class="panel-title">
+          <span>01</span>
+          <h2>Read the creative.</h2>
+          <em id="queue">READY TO SCAN</em>
+        </div>
+        <div class="metrics">
+          <div><strong id="adsCount">0</strong><span>ads classified</span></div>
+          <div>
+            <strong id="decisions">0</strong><span>typed decisions</span>
+          </div>
+        </div>
+        <div class="wall-viewport">
+          <div id="wall" class="wall"></div>
+          <div class="scanline"></div>
+        </div>
+        <div class="wall-caption">
+          <span id="currentLabel">Waiting for the first creative</span
+          ><span class="live-dot">●</span>
+        </div>
+        <div class="progress"><i id="progress"></i></div>
+      </section>
+      <section class="panel map-panel">
+        <div class="panel-title">
+          <span>02</span>
+          <h2>Watch patterns emerge.</h2>
+        </div>
+        <div class="metrics">
+          <div>
+            <strong id="familyCount">0</strong><span>creative families</span>
+          </div>
+          <div>
+            <strong id="cost">DEMO</strong
+            ><span id="costLabel">no provider charges</span>
+          </div>
+        </div>
+        <div class="map-caption">
+          <span>OBSERVED AD IDS IN FAMILY ↑</span
+          ><span class="legend">● Active, 60+ days since start</span>
+        </div>
+        <svg
+          id="map"
+          viewBox="0 0 560 350"
+          role="img"
+          aria-label="Creative families by age since reported start and matching ad count"
+        ></svg>
+        <div class="axis-caption">
+          AGE SINCE REPORTED START →
+          <span id="mapNote"
+            >Synthetic dates · illustrative pattern distribution</span
+          >
+        </div>
+        <div class="rank-head">
+          <span
+            >Pattern
+            <select id="dimension">
+              <option value="format">Format</option>
+              <option value="hook">Hook</option>
+              <option value="offer">Offer</option>
+              <option value="angle">Angle</option>
+            </select></span
+          ><span>Active 60+ days / dated active</span>
+        </div>
+        <div id="patterns"></div>
+      </section>
+      <section class="panel brief-panel">
+        <div class="panel-title">
+          <span>03</span>
+          <h2>Make it your own.</h2>
+          <em id="briefCount">0 BRIEFS</em>
+        </div>
+        <div class="brief-intro">
+          <strong>Research into a shootable idea.</strong>
+          <p id="briefDescription">
+            Original demo concepts. Three explicit review criteria.
+          </p>
+        </div>
+        <div id="briefFeed"></div>
+      </section>
+    </main>
+    <footer>
+      <span id="disclosure"
+        >SIMULATION · Fictional brands, synthetic dates, labels and scores.
+        AI-generated illustrative creatives.</span
+      ><a
+        href="https://github.com/artemnovitckii/ad-pattern-lab"
+        target="_blank"
+        rel="noopener"
+        >Get the system ↗</a
+      ><button id="showControls">Controls · C</button>
+    </footer>
+    <dialog id="detail">
+      <button id="closeDetail" aria-label="Close creative">×</button>
+      <div id="detailBody"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

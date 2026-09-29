@@ -1,0 +1,4 @@
+[
+  {"id":"example-1","brand":"Fictional notebook brand","text":"Your ideas deserve a little space. Meet our A5 notebook. Shop the two-pack.","headline":"A place for the next idea","visualNotes":"A still photograph of two notebooks on a desk, with a text headline.","kind":"text","startDate":"2026-07-01T00:00:00Z","collectedAt":"2026-09-29T00:00:00Z","active":true},
+  {"id":"example-2","brand":"Fictional notebook brand","text":"Too many tabs open? Start with one page. Meet our A5 notebook. Learn more.","kind":"text","startDate":"2026-09-20T00:00:00Z","collectedAt":"2026-09-29T00:00:00Z","active":true}
+]

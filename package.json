@@ -1,0 +1,23 @@
+{
+  "name": "ad-pattern-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Local-first Jev ad research with a no-key simulation, local OCR, imports and optional Apify collection.",
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "setup": "node scripts/setup.mjs",
+    "doctor": "node --env-file-if-exists=.env scripts/doctor.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check lib/pipeline.mjs && node --check lib/providers.mjs",
+    "demo:images": "node scripts/demo-images.mjs",
+    "demo:download": "node scripts/download-demo-images.mjs"
+  },
+  "dependencies": {
+    "tesseract.js": "7.0.0"
+  }
+}

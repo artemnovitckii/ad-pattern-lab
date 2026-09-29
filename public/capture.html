@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Import public creative evidence</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>Import public creative evidence</h1>
+    <p>
+      Paste an array of visible public ad records. This replaces the current
+      local batch and does not call AI providers.
+    </p>
+    <label
+      >Ad records JSON<textarea
+        id="payload"
+        style="height: 300px"
+      ></textarea></label
+    ><button id="save">Save imported records</button>
+    <p id="result"></p>
+    <script>
+      document.querySelector("#save").onclick = async () => {
+        try {
+          const ads = JSON.parse(document.querySelector("#payload").value);
+          const r = await fetch("/api/import", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ads }),
+          });
+          const j = await r.json();
+          document.querySelector("#result").textContent = r.ok
+            ? "Saved " + j.ads.length + " records"
+            : j.error;
+        } catch (e) {
+          document.querySelector("#result").textContent = e.message;
+        }
+      };
+    </script>
+  </body>
+</html>
