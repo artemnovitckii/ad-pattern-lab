@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Jev · Motion studies</title>
+    <link rel="stylesheet" href="motion.css" />
+  </head>
+  <body>
+    <header class="studio-header">
+      <a href="/">AD PATTERN LAB</a><span>MOTION STUDIES</span
+      ><a href="/">Back to research ↗</a>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">AD RESEARCH / ANIMATION PREVIEWS</p>
+        <h1>Research, in motion.</h1>
+        <p>
+          Real creative images. Simulated analysis. Choose a direction, then
+          play it full size.
+        </p>
+      </section>
+      <nav class="studies" aria-label="Animation variations">
+        <a class="study" data-variant="reference" href="?variant=reference"
+          ><img
+            class="study-preview"
+            src="/assets/motion/reference.jpg"
+            alt="Reference layout in light mode with blue accents"
+            loading="lazy"
+          /><span class="study-num">NEW</span>
+          <div>
+            <h2>Reference / Light</h2>
+            <p>The supplied three-column layout, recolored in electric blue.</p>
+          </div>
+          <span class="study-arrow">↗</span></a
+        >
+
+        <a class="study" data-variant="control" href="?variant=control"
+          ><img
+            class="study-preview"
+            src="/assets/motion/control.jpg"
+            alt="Control animation preview"
+            loading="lazy"
+          /><span class="study-num">01</span>
+          <div>
+            <h2>Control room</h2>
+            <p>
+              The original, with a continuous image feed and a calmer graph.
+            </p>
+          </div>
+          <span class="study-arrow">↗</span></a
+        >
+        <a class="study" data-variant="flow" href="?variant=flow"
+          ><img
+            class="study-preview"
+            src="/assets/motion/flow.jpg"
+            alt="Flow animation preview"
+            loading="lazy"
+          /><span class="study-num">02</span>
+          <div>
+            <h2>Creative stream</h2>
+            <p>Watch the images leave the wall and settle onto the map.</p>
+          </div>
+          <span class="study-arrow">↗</span></a
+        >
+        <a class="study" data-variant="scanner" href="?variant=scanner"
+          ><img
+            class="study-preview"
+            src="/assets/motion/scanner.jpg"
+            alt="Scanner animation preview"
+            loading="lazy"
+          /><span class="study-num">03</span>
+          <div>
+            <h2>Under the lens</h2>
+            <p>
+              Big creatives, visible classifications, a map building underneath.
+            </p>
+          </div>
+          <span class="study-arrow">↗</span></a
+        >
+      </nav>
+      <section class="player" aria-label="Animation preview">
+        <div class="toolbar">
+          <div class="playback">
+            <button id="play" disabled>Loading images…</button
+            ><button id="restart" aria-label="Restart animation">↺</button
+            ><label
+              >Length
+              <select id="duration">
+                <option value="20">20s</option>
+                <option value="40">40s</option>
+                <option value="80">80s</option>
+              </select></label
+            >
+          </div>
+          <div class="view-controls">
+            <label
+              >Frame
+              <select id="format">
+                <option value="wide">Landscape</option>
+                <option value="portrait">Portrait</option>
+              </select></label
+            ><button id="clean">Clean view ↗</button>
+          </div>
+        </div>
+        <div class="stage">
+          <canvas
+            id="canvas"
+            role="img"
+            aria-label="Simulated ad research animation: an image wall, illustrative pattern map, and example creative briefs. These are not real Jev results."
+          ></canvas>
+          <div id="loading" role="status">Preparing the image cache…</div>
+        </div>
+        <div class="scrubber">
+          <output id="time">00:00</output
+          ><input
+            id="seek"
+            type="range"
+            min="0"
+            max="20"
+            step="0.01"
+            value="0"
+            aria-label="Animation position"
+          /><span id="end">00:20</span>
+        </div>
+        <p class="player-note">
+          <span id="status">Preparing preview.</span
+          ><span>Space: pause · R: restart · C: clean view</span>
+        </p>
+      </section>
+      <section class="details">
+        <p>
+          All three use the same local image library. No API calls or credits.
+          The dates, labels, scores and replay speed are illustrative.
+        </p>
+        <p>
+          <a id="clip" href="/assets/motion/control.mp4"
+            >Download this video preview ↓</a
+          >
+        </p>
+      </section>
+    </main>
+    <button id="exitClean" aria-label="Show preview controls">
+      Controls · C
+    </button>
+    <script type="module" src="motion.mjs"></script>
+  </body>
+</html>

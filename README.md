@@ -2,9 +2,9 @@
 
 **Turn a pile of ads into a research library and your next creative brief.** A local Jev app with a ready-to-record simulation, imports, free local OCR and an optional Meta Ad Library collection connector.
 
-![Ad Pattern Lab simulation](docs/preview.jpg)
+[![Ad Pattern Lab light-mode simulation](docs/preview.jpg)](https://novitckii.com/lib/jev-marketing/demo-light.mp4)
 
-[Watch the simulation](docs/demo.mp4) · [Full setup guide](docs/SETUP.md) · [Validation status](docs/VALIDATION.md) · [Data flow](docs/PRIVACY.md) · [Image sources](docs/IMAGE-SOURCES.md)
+[Watch the 20-second demo](https://novitckii.com/lib/jev-marketing/demo-light.mp4) · [Shareable guide](https://novitckii.com/resources/jev-marketing/) · [Full setup guide](docs/SETUP.md) · [Validation status](docs/VALIDATION.md) · [Data flow](docs/PRIVACY.md) · [Image sources](docs/IMAGE-SOURCES.md)
 
 ## Start with no keys
 
@@ -18,21 +18,34 @@ npm run setup
 npm start
 ```
 
-Open **http://127.0.0.1:5194**. Press **Play simulation**. The ad wall, map and briefs advance together. No provider requests happen in Simulation mode.
+Open **http://127.0.0.1:5194/variations.html?variant=reference** for the light-mode recording demo. No keys are needed. The ad wall, map, and counters advance together. Open **http://127.0.0.1:5194** for the import and analysis app.
 
 Record a clean 20-second version at:
 
 ```text
-http://127.0.0.1:5194/?clean=1&autoplay=1&duration=20
+http://127.0.0.1:5194/variations.html?variant=reference&clean=1&duration=20
 ```
 
-Add `&portrait=1` for a taller composition. `C` toggles controls, `R` restarts, and Space pauses. The timer is replay time, not measured API speed. The starter uses fictional brands and generated creatives. An optional local image pack replaces the artwork with public examples. In both modes the dates, labels, graph positions and brief scores are synthetic. It is not a campaign case study.
+The reference demo uses a wide composition. The other animation variants offer portrait framing. `C` toggles controls, `R` restarts, and Space pauses. The timer is replay time, not measured API speed. The starter uses fictional brands and generated creatives. An optional local image pack replaces the artwork with public examples. In both modes the dates, labels, graph positions and brief scores are synthetic. It is not a campaign case study.
+
+## Animation variations
+
+Open **http://127.0.0.1:5194/variations.html** to compare recording treatments:
+
+- **Reference / Light:** the supplied three-column ad-research layout, in light mode with blue accents, horizontal scanning, independently scrolling pattern examples, changing multiples and bars, and scrolling briefs. Each thumbnail crossing the scan edge increments the processed count once. The graph, three judgments per ad, illustrative cost, and brief counters follow those events; the rate shows crossings in the previous second. Day counts stay fixed, as in the source clip.
+- **Control room:** a continuous thumbnail wall, stable graph, and scrolling brief feed.
+- **Creative stream:** thumbnails travel from the wall into the map, with briefs below.
+- **Under the lens:** a large creative and seven illustrative labels, with a live-building map.
+
+All variants have pause, restart, scrubbing, and 20/40/80-second playback. Reference / Light preserves the source's wide layout; the other three also offer portrait framing. Clean view hides the page controls. Reduced-motion preferences disable autoplay. These are local simulation previews, not provider runs. The renderer preloads images, keeps a bounded decoded-image cache, and drives motion from a single animation clock.
 
 ## Want a wall with thousands of images?
 
 For the larger visual, run `npm run demo:download` after installing FFmpeg. This downloads a curated list of small public reference images from Swipefile into your local cache, with source links. Some are digital ads, some are print or other marketing examples; this is not a current Meta campaign dataset. Availability can change.
 
 Or import your own local image folder with `npm run demo:images -- /path/to/images` (requires FFmpeg). The app compresses thumbnails, deduplicates exact files and renders only the visible cards. Source links can be preserved with a file manifest. [Image-pool setup](docs/SETUP.md#use-hundreds-or-thousands-of-your-own-demo-images). The public starter includes 16 generated examples; external image libraries stay local and are not part of the code license.
+
+For the exact recording controls and image-pack setup, see **[docs/RECORDING.md](docs/RECORDING.md)**.
 
 ## Three ways in
 

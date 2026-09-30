@@ -13,7 +13,9 @@ Version 0.1.0, September 30, 2026. This is a local beta.
 - Script-like source copy renders as text; a cross-origin write is rejected.
 - Verified the public image-pack command on five cached images with no paid calls and no duplicate files added.
 - Imported and compressed 2,136 distinct public creative image files locally (336 Meta images and 1,800 additional gallery images after exact-file deduplication). Multiple images can come from one ad.
-- A recording of the actual demo UI is included in `docs/demo.mp4`.
+- A 20-second light-mode recording of the actual demo UI is included in `docs/demo.mp4`.
+- Reference / Light: 32 observed thumbnail crossings produced exactly 32 counter increments. Judgments, illustrative cost, brief counters, and graph arrivals follow the same scan events.
+- Verified changing pattern thumbnails/multiples, stat-card text bounds, pause stability, no browser errors, and smooth frame timing (about 9 ms at the 95th percentile on the development machine). These are local rendering checks, not Jev speed measurements.
 
 ## Implemented, not verified with paid live calls
 

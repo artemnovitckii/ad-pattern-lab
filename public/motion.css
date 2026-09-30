@@ -1,0 +1,379 @@
+:root {
+  color-scheme: dark;
+  --bg: #10110f;
+  --ink: #eeeee5;
+  --muted: #9b9d90;
+  --lime: #dbfa70;
+  --line: #34362e;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+select {
+  font: inherit;
+  color: inherit;
+  background: #24261e;
+  border: 1px solid #464a37;
+  border-radius: 5px;
+  padding: 9px 13px;
+  cursor: pointer;
+}
+button:active {
+  transform: scale(0.98);
+}
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 5px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.studio-header {
+  height: 74px;
+  border-bottom: 1px solid var(--line);
+  padding: 0 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+.studio-header > a:first-child {
+  color: var(--lime);
+  font-weight: 800;
+}
+.studio-header > span {
+  color: var(--muted);
+}
+main {
+  max-width: 1560px;
+  margin: auto;
+  padding: 54px 4%;
+}
+.eyebrow {
+  font:
+    11px Menlo,
+    monospace;
+  letter-spacing: 2px;
+  color: var(--lime);
+}
+h1 {
+  font-size: clamp(38px, 5vw, 68px);
+  letter-spacing: -3px;
+  margin: 14px 0;
+  font-weight: 600;
+}
+.intro > p:last-child {
+  color: var(--muted);
+  font-size: 16px;
+}
+.studies {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 34px 0 24px;
+}
+.study {
+  display: flex;
+  gap: 14px;
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  transition:
+    border-color 180ms,
+    background-color 180ms;
+}
+.study.active {
+  border-color: var(--lime);
+  background: #1b2012;
+}
+.study-num {
+  font:
+    12px Menlo,
+    monospace;
+  color: var(--lime);
+}
+.study h2 {
+  font-size: 20px;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+.study p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 280px;
+}
+.study-arrow {
+  margin-left: auto;
+  font-size: 22px;
+  color: var(--lime);
+}
+.player {
+  border: 1px solid var(--line);
+  background: #080a08;
+}
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.playback,
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toolbar label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+}
+#play {
+  min-width: 100px;
+  background: var(--lime);
+  color: #182008;
+  border: 0;
+  font-weight: 700;
+}
+.stage {
+  position: relative;
+  margin: auto;
+  max-width: 100%;
+  overflow: hidden;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #080a08;
+}
+body.portrait .stage {
+  max-width: 810px;
+}
+#loading {
+  position: absolute;
+  inset: 0;
+  background: #0c0e0ce8;
+  display: grid;
+  place-items: center;
+  font:
+    14px Menlo,
+    monospace;
+  color: var(--lime);
+}
+#loading[hidden] {
+  display: none;
+}
+.scrubber {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 18px;
+  font:
+    11px Menlo,
+    monospace;
+  color: var(--muted);
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--lime);
+  height: 4px;
+}
+.player-note {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 18px 12px;
+  font-size: 11px;
+  color: var(--muted);
+  gap: 16px;
+}
+.details {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+.details > p:first-child {
+  max-width: 760px;
+}
+.details a {
+  color: var(--lime);
+  white-space: nowrap;
+}
+#exitClean {
+  display: none;
+  position: fixed;
+  right: 12px;
+  bottom: 10px;
+  font-size: 10px;
+  opacity: 0.4;
+}
+.clean .studio-header,
+.clean .intro,
+.clean .studies,
+.clean .toolbar,
+.clean .scrubber,
+.clean .player-note,
+.clean .details {
+  display: none;
+}
+.clean main {
+  padding: 0;
+  max-width: none;
+}
+.clean .player {
+  border: 0;
+}
+.clean .stage {
+  max-width: min(100vw, 144vh);
+  margin: auto;
+}
+.clean.portrait .stage {
+  max-width: min(100vw, 80vh);
+}
+.clean #exitClean {
+  display: block;
+}
+@media (max-width: 760px) {
+  main {
+    padding: 28px 16px;
+  }
+  .studio-header {
+    font-size: 9px;
+  }
+  .studio-header > span {
+    display: none;
+  }
+  .studies {
+    grid-template-columns: 1fr;
+  }
+  .study {
+    padding: 16px;
+  }
+  .study p {
+    max-width: none;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .player-note {
+    flex-direction: column;
+  }
+  .details {
+    flex-direction: column;
+    gap: 0;
+  }
+  h1 {
+    letter-spacing: -1.6px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+.study {
+  position: relative;
+  flex-wrap: wrap;
+  align-content: start;
+}
+.study-preview {
+  width: calc(100% + 36px);
+  max-width: none;
+  margin: -22px -18px 6px;
+  aspect-ratio: 1.44;
+  object-fit: cover;
+}
+.study > div {
+  flex: 1;
+}
+.study-num {
+  margin-top: 3px;
+}
+.study-arrow {
+  margin-left: 0;
+}
+@media (max-width: 760px) {
+  .study-preview {
+    width: 140px;
+    margin: 0;
+    align-self: center;
+  }
+  .study > div {
+    min-width: 150px;
+  }
+  .study-num {
+    display: none;
+  }
+}
+
+.reference {
+  color-scheme: light;
+  --lime: #2563eb;
+  --bg: #f7f8fa;
+  --ink: #182132;
+  --muted: #636b78;
+  --line: #d5dbe4;
+}
+.reference .study.active {
+  background: #edf3ff;
+}
+.reference .stage {
+  max-width: none;
+}
+.clean.reference .stage {
+  max-width: min(100vw, 181.56vh);
+}
+.reference .player,
+.reference canvas {
+  background: #f7f8fa;
+}
+.reference button,
+.reference select {
+  background: #ffffff;
+  border-color: #d5dbe4;
+}
+.reference #play {
+  background: var(--lime);
+  color: #ffffff;
+}
+.reference #loading {
+  background: #f7f8faf0;
+}
+.studies {
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 1000px) {
+  .studies {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .studies {
+    grid-template-columns: 1fr;
+  }
+}

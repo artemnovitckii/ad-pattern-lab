@@ -15,3 +15,7 @@ The downloadable image files are third-party material. The repository's MIT lice
 The recording can use a local image library. Real images in a simulation do not make its labels or scores real. The UI says Simulation; its dates, family grouping, graph positions, classification labels, briefing scores and timer are illustrative. Use the Import/Collection workflow to obtain actual Jev judgments from real supplied evidence.
 
 The development recording also uses a separately cached public Meta image sample. It is not part of the optional gallery pack and no Meta cookies, account credentials or signed media URLs are shipped in the public repository. Multiple images can come from one carousel ad. Image counts are not ad counts.
+
+## Header icon
+
+The Meta mark is bundled from [Simple Icons](https://simpleicons.org/?q=meta). It identifies the platform being researched; this independent project is not affiliated with Meta.

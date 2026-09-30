@@ -13,7 +13,7 @@ npm start
 
 Open http://127.0.0.1:5194. Keep the terminal open. The default Simulation tab works without any keys. `npm run setup` will not overwrite an existing `.env` file. Doctor reports configuration presence, not successful API access.
 
-For recording, choose 20, 40 or 80 seconds, Play, and Clean view. Portrait puts the wall and map above the briefs. Press C to restore controls. The simulation is an animation of bundled synthetic data; speeding it up does not benchmark providers.
+For the light-mode recording demo, open http://127.0.0.1:5194/variations.html?variant=reference&clean=1&duration=20. Choose 20, 40 or 80 seconds in the controls. Each tile crossing the scan line increments the processed count; this is animation playback, not a provider benchmark. Other variants offer portrait framing. Press C for controls, R to restart, and Space to pause. [Recording guide](RECORDING.md).
 
 ## 2. Add only the providers you need
 
@@ -164,7 +164,7 @@ Or bring your own local image folder:
 npm run demo:images -- /path/to/your/image-folder
 ```
 
-The command builds compressed thumbnails under `data/demo-images/`, removes exact file duplicates, and writes `data/demo-library.json`. Reload the app. The counter reflects the number of unique image files in that local library. Only the current window of cards is rendered; the entire library is not loaded as full-size image elements.
+The command builds compressed thumbnails under `data/demo-images/`, removes exact file duplicates, and writes `data/demo-library.json`. Reload the app. The library count reflects unique image files. In Reference / Light, the processed counter counts tiles that actually cross the scan edge during playback, so a 20-second clip does not claim to scan the entire library. Only the current window of cards is rendered; the entire library is not loaded as full-size image elements.
 
 For source attribution, the command also accepts a JSON array of local files:
 

@@ -13,7 +13,7 @@
     "setup": "node scripts/setup.mjs",
     "doctor": "node --env-file-if-exists=.env scripts/doctor.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check server.mjs && node --check public/app.js && node --check lib/pipeline.mjs && node --check lib/providers.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check lib/pipeline.mjs && node --check lib/providers.mjs && node --check public/motion.mjs && node --check public/reference.mjs",
     "demo:images": "node scripts/demo-images.mjs",
     "demo:download": "node scripts/download-demo-images.mjs"
   },
