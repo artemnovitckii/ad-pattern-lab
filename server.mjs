@@ -19,7 +19,7 @@ import { apifyInput } from "./lib/data.mjs";
 import { download, analysisProvider } from "./lib/providers.mjs";
 // Read configuration locally; never expose credential values to the browser.
 const {parseEnv} = await import("node:util");
-for (const envFile of [resolve(".env"), resolve("../../.env")]) {
+for (const envFile of [resolve(".env")]) {
   try {const values=parseEnv(await readFile(envFile,"utf8")); for(const [key,value] of Object.entries(values)) if(!process.env[key]) process.env[key]=value;} catch {}
 }
 await init();
