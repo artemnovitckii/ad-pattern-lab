@@ -1,0 +1,4 @@
+dimension,pattern,dated_active_ads,aged_60_plus,aged_60_plus_share,median_age_days,exact_families,sample_baseline_share,ratio_to_baseline,collection_date,historical_label_provider
+format,talking_head,306,58,0.1895424836601307,19,242,0.07907742998352553,2.3969226579520697,2026-10-12,openai
+hook,result,118,22,0.1864406779661017,17.5,114,0.07907742998352553,2.3576977401129944,2026-10-12,openai
+offer,workshop,324,56,0.1728395061728395,24,314,0.07907742998352553,2.1856995884773665,2026-10-12,openai

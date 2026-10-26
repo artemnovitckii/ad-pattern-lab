@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { join, resolve, extname, basename } from "node:path";
 import {
   init,
+  getState,
   publicState,
   importRows,
   addUpload,
@@ -15,7 +16,12 @@ import {
   busy,
 } from "./lib/pipeline.mjs";
 import { apifyInput } from "./lib/data.mjs";
-import { download } from "./lib/providers.mjs";
+import { download, analysisProvider } from "./lib/providers.mjs";
+// Read configuration locally; never expose credential values to the browser.
+const {parseEnv} = await import("node:util");
+for (const envFile of [resolve(".env"), resolve("../../.env")]) {
+  try {const values=parseEnv(await readFile(envFile,"utf8")); for(const [key,value] of Object.entries(values)) if(!process.env[key]) process.env[key]=value;} catch {}
+}
 await init();
 const port = Number(process.env.PORT || 5194),
   host = "127.0.0.1";
@@ -86,8 +92,10 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && path === "/api/config")
       return send(200, {
         jev: !!process.env.TYPESAFE_API_KEY,
+        openai: !!process.env.OPENAI_API_KEY,
+        analysisProvider: analysisProvider(),
         apify: !!process.env.APIFY_TOKEN,
-        speech: !!(process.env.FIREWORKS_API_KEY || process.env.GROQ_API_KEY),
+        speech: process.env.TRANSCRIPTION_PROVIDER !== "none" && !!(process.env.FIREWORKS_API_KEY || process.env.GROQ_API_KEY),
         writer: !!(process.env.LLM_API_KEY && process.env.LLM_MODEL),
         busy: busy(),
       });
@@ -97,6 +105,13 @@ const server = http.createServer(async (req, res) => {
         'attachment; filename="ad-pattern-lab.json"',
       );
       return send(200, exportState());
+    }
+    if (req.method === "GET" && path === "/api/frame") {
+      const ad=getState().ads.find(a=>a.id===url.searchParams.get("ad"));
+      const index=Number(url.searchParams.get("index"));
+      if(!Number.isInteger(index)||index<0||!ad?.visualFrames?.[index]) return send(404,{error:"Frame not found"});
+      const bytes=await readFile(ad.visualFrames[index].file);
+      res.writeHead(200,{"Content-Type":"image/jpeg","Cache-Control":"private,max-age=3600"});return res.end(bytes);
     }
     if (req.method === "GET" && path === "/api/media") {
       const { bytes, type } = await download(
@@ -121,6 +136,8 @@ const server = http.createServer(async (req, res) => {
       if (path === "/api/analyze") {
         if (busy()) throw new Error("A job is running");
         if (!publicState().ads.length) throw new Error("Import ads first");
+        if(analysisProvider()==="openai"&&!process.env.OPENAI_API_KEY) throw new Error("Add OPENAI_API_KEY to .env and restart.");
+        if(analysisProvider()==="jev"&&!process.env.TYPESAFE_API_KEY) throw new Error("Add TYPESAFE_API_KEY to .env and restart.");
         run(processAds());
         return send(202, { started: true });
       }

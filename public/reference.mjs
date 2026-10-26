@@ -87,12 +87,12 @@ export function drawReference({
     scanProgress = scanned === 0 ? 0 : Math.min(total, 1 + (travel - 1.5) / (wallStep / 4));
   rect(0, 0, 2048, 1128, "#f7f8fa");
   rect(50, 26, 13, 13, blue);
-  text("Jev for Meta Ads", 80, 42, 26, ink, 650);
+  text("Jev for Meta Ads", 80, 42, 21, ink, 650);
   text(
     "Scans the Meta Ad Library, finds long-running patterns, then helps write your next ad brief.",
-    322,
+    413,
     39,
-    17,
+    14,
     grey,
   );
   ctx.drawImage(metaIcon, 1490, 18, 30, 30);
@@ -113,9 +113,9 @@ export function drawReference({
     text(num, x, 114, 15, blue, 600, true);
     text(label, x + 32, 113, 24, ink, 600);
   };
-  section("01", "Jev scans the Ad Library", 50);
-  section("02", "Jev analyses the longest running ads", 740);
-  section("03", "Jev helps write briefs for winning ads", 1428);
+  section("01", "Scan the Ad Library", 50);
+  section("02", "Jev classifies the ad", 740);
+  section("03", "Turn patterns into original briefs", 1428);
   const stat = (x, w, value, color, label, sub) => {
     rect(x, 139, w, 92, "#ffffff");
     stroke(x, 139, w, 92, border);

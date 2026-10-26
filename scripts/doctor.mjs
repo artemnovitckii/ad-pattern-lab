@@ -5,7 +5,7 @@ for (const n of ["ffmpeg", "ffprobe"])
     n,
     spawnSync(n, ["-version"]).status === 0
       ? "available"
-      : "not found; needed only for video files",
+      : "not found; needed for image resizing and video frames",
   );
 for (const [name, key] of Object.entries({
   Jev: "TYPESAFE_API_KEY",

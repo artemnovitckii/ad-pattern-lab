@@ -1,24 +1,24 @@
 # Data flow and sharing
 
-The server binds to 127.0.0.1. This is a local development app, not an authenticated hosted service. It rejects unexpected hosts and cross-origin requests. Do not publish the server or bind it to a public interface without a separate security review.
+Ad Lab binds to 127.0.0.1. It is a local development app, not an authenticated hosted service. It rejects unexpected hosts and cross-origin requests. Do not expose it publicly without adding appropriate authentication and a security review.
 
-## What leaves the computer
+## What leaves your computer
 
-- **Simulation:** no API calls, analytics or remote image assets. It uses bundled fictional data.
-- **Optional demo image pack:** downloads public thumbnails from cdn.swipefile.com, with no API key. Their original source links are retained; dates, labels and scores shown in Simulation mode remain illustrative.
-- **OCR:** Tesseract.js processes images locally. First use fetches an English language model; subsequent use uses a local cache.
-- **Apify:** receives selected public library/page URLs and the collection configuration.
-- **Media retrieval:** downloads from restricted Meta/Apify CDN hosts; signed URLs may contain source access parameters.
-- **Fireworks or Groq speech:** receives extracted audio when that stage is enabled.
-- **Jev:** receives ad copy, OCR, transcripts and supplied visual notes, or your brief and brand facts for review.
-- **Optional writer:** receives ad copy, labels and brand facts through your configured provider.
+- **Bundled simulation:** no provider calls. Artwork and results are fictional local fixtures.
+- **Optional demo reference pack:** downloads public thumbnails from cdn.swipefile.com with source links. Its simulated labels and findings remain synthetic.
+- **Apify:** receives the selected public library/page URLs and collection settings.
+- **Media retrieval:** downloads creative files from restricted Meta/Apify CDN hosts. Signed URLs can contain access parameters.
+- **Jev:** receives resized creative images or up to four sampled video frames, plus ad copy, any transcript and supplied notes. Native image assets are uploaded to TypeSafe. Age and outcome metrics are not sent for classification. Brief review sends your draft and brand facts.
+- **Fireworks or Groq speech, if enabled:** receives extracted audio.
+- **Optional brief writer:** receives ad copy, classifications and your brand facts through your configured chat API.
+- **Archived optional provider connector:** only runs if explicitly selected; receives the same kind of creative evidence. It is not required for Jev.
 
-Provider retention and billing policies apply. The app does not guarantee how external providers retain submitted content.
+Provider retention, access and billing policies apply. Image preparation happens locally with FFmpeg; no local OCR engine or language-model download is used.
 
-## What stays in files
+## Files and exports
 
-Keys live in `.env`, never browser JavaScript. Runtime data, uploads, transcripts, OCR and classification caches live in `data/`. Both are Git-ignored. The latest batch is saved as `data/run.json`. Export before replacing it. Delete the data folder while the server is stopped to remove local batches and caches; this does not delete provider-side data.
+Keys stay in your ignored `.env`, never browser JavaScript. Uploads, prepared frames, transcripts, current batch and classification caches live in ignored `data/`. `data/run.json` stores the latest batch. Export before replacing it.
 
-Exports deliberately omit local file paths and signed media URLs, but include ad text, labels, original source links, generated briefs and your brand facts. Review exports before sharing. Do not include private customer information, credentials or material you cannot use.
+Exports omit local file paths and signed media URLs, but include text, labels, original source links, briefs and brand facts. Review them before sharing. Do not include credentials or private customer data.
 
-The bundled atlas in `public/assets/demo-creatives.jpg` is AI-generated illustrative artwork. Demo brands, ages, labels, counts and scores are fictional, not endorsements or measured campaign results.
+Delete `data/` while the server is stopped to remove local batches and caches. This does not remove data already submitted to providers. Third-party creative material remains the property of its owners; the code license does not grant rights to republish it.

@@ -12,6 +12,7 @@ import {
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+process.env.ANALYSIS_PROVIDER = "jev";
 const now = "2026-09-29T00:00:00.000Z";
 test("Apify fields normalize without inventing unavailable metrics", () => {
   const a = normalize(
@@ -38,6 +39,11 @@ test("Apify fields normalize without inventing unavailable metrics", () => {
   assert.equal(a.url, "https://www.facebook.com/ads/library/?id=123");
   assert.equal(a.startDate, new Date(1750000000000).toISOString());
   assert.equal(normalize({ text: "No dates" }).active, null);
+  const dynamic=normalize({ad_archive_id:'456',url:'https://www.facebook.com/ads/library/?view_all_page_id=123',snapshot:{body:{text:'{{product.brand}}'},title:'{{product.name}}',cards:[{body:'Get the free roadmap.',title:'Free roadmap',video_sd_url:'https://video.fbcdn.net/sd.mp4'}]}},{source:'apify',now});
+  assert.equal(dynamic.text,'Get the free roadmap.');
+  assert.equal(dynamic.mediaUrl,'https://video.fbcdn.net/sd.mp4');
+  assert.equal(dynamic.kind,'video');assert.equal(dynamic.headline,'Free roadmap');
+  assert.equal(dynamic.url,'https://www.facebook.com/ads/library/?id=456');
 });
 test("deduplicates IDs and exact copy; signed media differences remain separate", () => {
   assert.equal(
@@ -109,12 +115,18 @@ test("Jev classification never receives age or outcome metadata", () => {
 test("collection validates source and count, remote media rejects private URLs and lookalikes", () => {
   assert.throws(() => apifyInput(["https://example.com"], 50));
   assert.throws(() =>
-    apifyInput(["https://www.facebook.com/ads/library/"], 1001),
+    apifyInput(["https://www.facebook.com/ads/library/"], 10001),
   );
   assert.equal(
     apifyInput(["https://www.facebook.com/ads/library/"], 50).count,
     50,
   );
+  assert.deepEqual(apifyInput(["https://www.facebook.com/ads/library/"], 50).urls, [{url: "https://www.facebook.com/ads/library/"}]);
+  assert.equal(
+    apifyInput(["https://www.facebook.com/ads/library/"], 10000).count,
+    10000,
+  );
+  assert.equal(normalizeMany(Array.from({ length: 1201 }, (_, i) => ({ id: String(i) }))).length, 1201);
   for (const url of [
     "http://127.0.0.1/x",
     "https://fbcdn.net.evil.com/x",

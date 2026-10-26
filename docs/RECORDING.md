@@ -22,10 +22,23 @@ The default recording uses a light background, blue accents, a Meta Ads header, 
 - **Space:** pause or resume.
 - **C:** show or hide controls.
 - In the controls, choose **20, 40, or 80 seconds** and scrub the timeline.
+- **Speed:** choose 1×, 1.5×, 2×, or 3× before recording. The entire animation uses the same playback clock, so thumbnails, scan counts, graph and briefs stay synchronized. A 20-second timeline at 2× finishes in 10 real seconds.
 - **Download preview** downloads the included 20-second MP4; it does not render your current image pool or duration. Screen-record playback to capture your own version.
 - The other three variations also support portrait framing.
 
 Each thumbnail crossing the scan line adds one to the processed counter and one point to the map. The scan rate is crossings in the preceding second. Three illustrative judgments are counted per processed tile; illustrative cost follows that same count. The pattern strips scroll independently, and their multiples and bars vary. Brief cards arrive as their count increases. These displayed metrics are synthetic, not API measurements or real ad outcomes.
+
+## Smooth fast recordings
+
+Record at the final playback speed, preferably at 60 fps, and keep the resulting clip at 1× in the editor. Start with 1.5× or 2×; very fast scrolling still becomes harder to follow. Speeding up an existing recording discards intermediate motion samples and can make thumbnail movement look jumpy. A 60 fps source helps only when the recorder actually captures distinct frames and the final export preserves them.
+
+For a 10-second take of the 20-second simulation:
+
+```text
+http://127.0.0.1:5194/variations.html?variant=reference&clean=1&duration=20&speed=2
+```
+
+Wait for the image cache to finish preparing, then press **R** to restart for the take. The included downloadable MP4 remains the fixed preview, independent of the selected speed.
 
 ## Add image variety
 

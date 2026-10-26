@@ -54,7 +54,7 @@ function rng(seed) {
     return seed / 4294967296;
   };
 }
-export function demoData() {
+export function demoData(images = []) {
   const rand = rng(29326),
     ads = [];
   const now = "2026-09-29T12:00:00.000Z";
@@ -64,15 +64,16 @@ export function demoData() {
         formatTiles[format][
           Math.floor(family / 6) % formatTiles[format].length
         ],
-      hook = hooks[family % 6],
-      age = Math.floor(rand() * 210 + (format === "creator_demo" ? 35 : 0)),
+      hook = hooks[Math.floor(rand() * hooks.length)],
+      older = rand() < ({ creator_demo: .79, comparison: .85, testimonial: .67, founder: .58, graphic: .42, product: .29 }[format]),
+      age = older ? 60 + Math.floor(rand() * 160) : 3 + Math.floor(rand() * 55),
       count = 1 + Math.floor(rand() ** 2 * 24);
     for (let i = 0; i < count; i++)
       ads.push({
         id: `demo-${family}-${i}`,
         family: `demo-family-${family}`,
         brand: tileBrands[tile],
-        text: copy[family % 6],
+        text: copy[hooks.indexOf(hook)],
         headline: [
           "Make room for good hair",
           "Meet your daily ritual",
@@ -85,14 +86,15 @@ export function demoData() {
         collectedAt: now,
         active: true,
         status: "complete",
-        source: "simulation",
+        source: "Simulated research",
+        synthetic: true,
         labels: Object.fromEntries(
           Object.entries({
             format,
             hook,
-            angle: "convenience",
-            offer: family % 4 ? "none" : "bundle",
-            proof: format === "testimonial" ? "testimonial" : "demo",
+            angle: ["convenience", "performance", "price", "trust", "experience", "identity"][Math.floor(family / 6) % 6],
+            offer: ["none", "bundle", "discount", "subscription", "trial", "guarantee"][Math.floor(family / 12) % 6],
+            proof: format === "testimonial" ? "testimonial" : format === "comparison" ? "comparison" : format === "creator_demo" ? "demo" : "none",
             objection: "effort",
             cta: "buy",
           }).map(([key, value]) => [
@@ -103,30 +105,45 @@ export function demoData() {
       });
   }
   // Mix families so a replay feels like a stream, not a block of duplicates.
-  const ordered = ads
+  let ordered = ads
     .map((a) => ({ a, k: rand() }))
     .sort((a, b) => a.k - b.k)
     .map((x) => x.a);
+  if (images.length) {
+    ordered = [...images].sort((a, b) => a.hash.localeCompare(b.hash)).map((image, i) => ({
+      ...ordered[i % ordered.length], id: `visual-${i}`, tile: undefined,
+      imageUrl: image.imageUrl, brand: image.brand, url: image.url,
+      referenceText: image.text || "", kind: "image",
+      source: "Public inspiration image / simulated research",
+    }));
+  }
+  const creativeNotes = {
+    creator_demo: ["Show the product in use before explaining it.", "Name the frustrating step it replaces.", "Finish with a simple product introduction."],
+    comparison: ["Open with two alternatives side by side.", "Compare one specific step, not every feature.", "Give the viewer a clear reason to choose."],
+    testimonial: ["Lead with a specific customer situation.", "Use a supported customer quote.", "Show how the product fits into their routine."],
+    graphic: ["Make one message readable immediately.", "Show the product next to the main promise.", "Keep the offer and action easy to find."],
+    product: ["Start on the product and its use case.", "Show one detail that answers an objection.", "Close on the next step, without adding claims."],
+    founder: ["Name the problem that led to the product.", "Explain one deliberate product choice.", "Invite viewers to see if it fits their routine."],
+  };
+  const briefHooks = {
+    creator_demo: "Your shower shelf called. It wants some space back.",
+    comparison: "Two routines. One crowded shelf. Which earns its place?",
+    testimonial: "My routine was complicated before my day even started.",
+    graphic: "A simpler routine starts with fewer decisions.",
+    product: "Meet the essentials for your next wash day.",
+    founder: "We started with one question: why so many steps?",
+  };
   const briefs = Array.from({ length: 24 }, (_, i) => {
-    const a = ordered[(i * 79) % ordered.length];
+    // Every format has linked briefs, so filtering remains useful.
+    const format = formats[i % formats.length];
+    const formatSources = ordered.filter(a => a.labels.format.value === format);
+    const matched = formatSources.filter(a => a.labels.hook.value === hooks[Math.floor(i / formats.length) % hooks.length]);
+    const sources = matched.length ? matched : formatSources;
+    const a = sources[(i * 13) % sources.length] || ordered[i % ordered.length];
     return {
-      title: [
-        "The routine reset",
-        "One less thing to think about",
-        "Meet your daily essentials",
-        "A different kind of wash day",
-      ][i % 4],
-      hook: [
-        "Your shower shelf called. It wants some space back.",
-        "Three steps in your routine. Which one earns its place?",
-        "A little daily care. Nothing extra to figure out.",
-        "Start with the routine, not another promise.",
-      ][i % 4],
-      beats: [
-        "Open on a crowded shelf.",
-        "Show the fictional product in a simple routine.",
-        "Close with a clear product introduction.",
-      ],
+      title: format.replaceAll("_", " "),
+      hook: briefHooks[format],
+      beats: creativeNotes[format],
       sourceIds: [a.id],
       source: "Simulated brief",
       review: {
@@ -139,5 +156,6 @@ export function demoData() {
       tile: a.tile,
     };
   });
+  for (const ad of ordered) ad.sampleBeats = creativeNotes[ad.labels.format.value];
   return { ads: ordered, briefs };
 }

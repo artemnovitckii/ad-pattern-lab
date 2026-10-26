@@ -16,34 +16,22 @@
         ><span id="timer">00:00</span
         ><button id="clean" title="Hide controls (C)">Clean view ↗</button>
       </div>
-    <a href="/variations.html" style="font-size:12px;color:var(--lime)">Animation variations ↗</a>
+    <nav class="visual-links" aria-label="Recording visuals"><a href="#pattern-examples">Ad examples ↓</a><a href="/variations.html?variant=reference">Recording visual ↗</a><a href="/variations.html">Variations ↗</a></nav>
 </header>
     <div class="controls">
       <div class="modes" role="group" aria-label="Data mode">
-        <button data-mode="demo" class="active">01 Simulation</button
+        <button data-mode="demo" class="active">01 Demo results</button
         ><button data-mode="import">02 Import ads</button
         ><button data-mode="collect">03 Meta collection</button>
       </div>
-      <div class="playback">
-        <label
-          >Replay
-          <select id="duration">
-            <option value="20">20 seconds</option>
-            <option value="40" selected>40 seconds</option>
-            <option value="80">80 seconds</option>
-          </select></label
-        ><button id="restart" title="Restart (R)">↺</button
-        ><button id="play" class="primary">▶ Play simulation</button
-        ><button id="record">Portrait</button
-        ><button id="export">Export</button>
-      </div>
+      <div class="view-tools"><button id="record">Portrait</button><button id="export">Export</button></div>
     </div>
     <section class="intro">
       <div>
-        <p class="eyebrow">COMPETITOR CREATIVE → YOUR NEXT BRIEF</p>
+        <p class="eyebrow">META AD RESEARCH / JEV</p>
         <h1>
-          Find the pattern.<br class="mobile" />
-          Make your next ad.
+          See what stays live.<br />
+          <span>Find your next angle.</span>
         </h1>
       </div>
       <p id="context">
@@ -55,8 +43,7 @@
       <div id="importPanel">
         <h2>Bring your own evidence.</h2>
         <p>
-          Paste ad copy, import a JSON array, or upload images / videos. OCR
-          runs locally. Jev needs your key.
+          Paste ad copy, import a JSON array, or upload images / videos. Jev reads creative images, ad copy and available transcripts. Add your TypeSafe key.
         </p>
         <div class="formrow">
           <label
@@ -87,16 +74,15 @@
           </button>
         </div>
         <p class="hint">
-          Video needs FFmpeg. Add Fireworks or Groq for speech. Without visual
-          observations, visual format can remain unknown. Importing JSON or text
+          Jev sees creative images and sampled video frames directly. FFmpeg prepares the images; add Fireworks or Groq for speech transcripts. Importing JSON or text
           replaces the current local batch; export it first if needed.
         </p>
       </div>
       <div id="collectPanel" hidden>
         <h2>Collect public Meta ads.</h2>
         <p>
-          Uses your Apify account. This connector is beta and has not been
-          verified against a paid live run.
+          Uses your Apify account to collect public ad records and creative media.
+          Collection and AI analysis are separate paid steps.
         </p>
         <label
           >Ad Library or Facebook page URLs, one per line<textarea
@@ -110,7 +96,7 @@
               id="limit"
               type="number"
               min="1"
-              max="1000"
+              max="10000"
               value="50" /></label
           ><label
             >Apify spend cap ($)<input
@@ -168,59 +154,97 @@
         <pre id="activity"></pre>
       </details>
     </div>
+    <section class="replay-strip" aria-label="Replay saved analysis">
+      <div class="replay-caption"><strong>REPLAY THE RUN</strong><span id="replayNote">Saved results. No API calls.</span></div>
+      <div class="playback">
+        <label>Animation<select id="scanStyle" aria-label="Analysis animation">
+          <option value="close" selected>Close-up · each ad</option>
+          <option value="timelapse">Timelapse · full run</option>
+        </select></label>
+        <label id="durationLabel" hidden>Duration<select id="duration" aria-label="Replay duration">
+          <option value="20">20 seconds</option>
+          <option value="40" selected>40 seconds</option>
+          <option value="80">80 seconds</option>
+        </select></label>
+        <button id="restart" title="Restart replay (R)" aria-label="Restart replay">↺</button>
+        <button id="finishReplay" hidden>Show all results</button>
+        <button id="play" class="primary">▶ Replay run</button>
+      </div>
+    </section>
+    <div class="summary-strip" aria-label="Research summary">
+      <div><strong id="adsCount">0</strong><span id="adsCountLabel">sample ads</span></div>
+      <div><strong id="decisions">0</strong><span id="decisionsLabel">sample labels</span></div>
+      <div><strong id="familyCount">0</strong><span id="familyLabel">sample groups</span></div>
+      <div><strong id="cost">DEMO</strong><span id="costLabel">no provider charges</span></div>
+    </div>
+    <section class="filter-toolbar" aria-label="Filter creatives">
+      <div><span class="eyebrow">FIND YOUR PATTERN</span><p>See the examples behind an angle.</p></div>
+      <label>FORMAT<select id="formatFilter"><option value="">All formats</option></select></label>
+      <span class="filter-plus" aria-hidden="true">+</span>
+      <label>HOOK<select id="hookFilter"><option value="">All hooks</option></select></label>
+      <button id="resetFilters" class="quiet">Reset filters ↺</button>
+      <span id="filterCount" role="status"></span>
+    </section>
     <main class="dashboard">
       <section class="panel wall-panel">
         <div class="panel-title">
           <span>01</span>
-          <h2>Read the creative.</h2>
+          <h2>Thumbnail wall</h2>
           <em id="queue">READY TO SCAN</em>
         </div>
-        <div class="metrics">
-          <div><strong id="adsCount">0</strong><span>ads classified</span></div>
-          <div>
-            <strong id="decisions">0</strong><span>typed decisions</span>
+        <section class="analysis-stage" id="analysisStage" aria-label="Ad analysis replay" hidden>
+          <div class="analysis-top"><span id="scanState">READING CREATIVE</span><span id="scanOrdinal"></span></div>
+          <div class="analysis-grid">
+            <div class="scan-media">
+              <img id="scanImage" alt="Ad creative being replayed" />
+              <div id="scanFallback" hidden></div>
+              <div class="scan-beam" id="scanBeam" aria-hidden="true"></div>
+              <span class="scan-ready" id="scanReady" aria-hidden="true">✓</span>
+              <span class="scan-frame" id="scanFrameLabel"></span>
+            </div>
+            <div class="scan-info"><strong id="scanBrand"></strong><div id="scanLabels"></div></div>
           </div>
-        </div>
+          <p id="scanCopy" class="scan-copy"></p>
+          <div class="scan-steps"><span id="scanVisualStep">01 / Visuals</span><span id="scanLabelStep">02 / Labels</span><span id="scanPlotStep">03 / Plot</span></div>
+        </section>
         <div class="wall-viewport">
           <div id="wall" class="wall"></div>
           <div class="scanline"></div>
         </div>
         <div class="wall-caption">
           <span id="currentLabel">Waiting for the first creative</span
-          ><span class="live-dot">●</span>
+          ><button id="nextCreatives" class="quiet" aria-label="Show next creative images">Next →</button>
         </div>
         <div class="progress"><i id="progress"></i></div>
       </section>
       <section class="panel map-panel">
         <div class="panel-title">
           <span>02</span>
-          <h2>Watch patterns emerge.</h2>
-        </div>
-        <div class="metrics">
-          <div>
-            <strong id="familyCount">0</strong><span>creative families</span>
-          </div>
-          <div>
-            <strong id="cost">DEMO</strong
-            ><span id="costLabel">no provider charges</span>
-          </div>
+          <h2>Creative map</h2>
+          <label class="map-view-label">View <select id="mapView" aria-label="Creative map view"><option value="landscape" selected>Creative landscape</option><option value="age">Age &amp; family size</option></select></label>
         </div>
         <div class="map-caption">
-          <span>OBSERVED AD IDS IN FAMILY ↑</span
-          ><span class="legend">● Active, 60+ days since start</span>
+          <span id="mapAxisTitle">HOOK · FORMAT · ANGLE · OFFER</span
+          ><span id="mapLegend" class="legend">Color = hook</span>
         </div>
         <svg
           id="map"
           viewBox="0 0 560 350"
-          role="img"
-          aria-label="Creative families by age since reported start and matching ad count"
+          role="group"
+          aria-label="Creative families grouped by nearby age and ad count. Select a thumbnail stack to browse its families."
         ></svg>
         <div class="axis-caption">
-          AGE SINCE REPORTED START →
+          <span id="mapAxisLabel">Creative similarity</span>
           <span id="mapNote"
             >Synthetic dates · illustrative pattern distribution</span
           >
         </div>
+        <p id="mapHelp" class="map-help">Position groups similar saved labels. Select a stack to browse every creative.</p>
+        <section id="mapSelection" class="map-selection" hidden aria-label="Creatives in selected thumbnail stack">
+          <div class="map-selection-heading"><div><strong id="mapSelectionTitle"></strong><span id="mapSelectionRange"></span></div><button id="closeMapSelection" aria-label="Close thumbnail stack">×</button></div>
+          <div id="mapClusterList" class="map-cluster-list"></div>
+          <div class="map-selection-nav"><button id="mapPrevious">← Previous</button><span id="mapSelectionPage"></span><button id="mapNext">Next →</button></div>
+        </section>
         <div class="rank-head">
           <span
             >Pattern
@@ -234,21 +258,38 @@
         </div>
         <div id="patterns"></div>
       </section>
-      <section class="panel brief-panel">
+      <aside class="panel inspector-panel">
         <div class="panel-title">
           <span>03</span>
-          <h2>Make it your own.</h2>
-          <em id="briefCount">0 BRIEFS</em>
+          <h2>Inside the creative</h2>
         </div>
-        <div class="brief-intro">
-          <strong>Research into a shootable idea.</strong>
-          <p id="briefDescription">
-            Original demo concepts. Three explicit review criteria.
-          </p>
-        </div>
-        <div id="briefFeed"></div>
-      </section>
+        <div id="inspector"></div>
+      </aside>
     </main>
+    <section class="findings-section" aria-labelledby="findingsTitle">
+      <div class="section-heading"><div><p class="eyebrow" id="findingsNote">ILLUSTRATIVE REPORT</p><h2 id="findingsTitle">The patterns worth testing.</h2></div><p>Follow the numbers to the examples.<br />Turn the pattern into your own creative.</p></div>
+      <div id="findings" class="findings-grid"></div>
+      <p id="findingsMethod" class="research-note">60+ day share measures age among dated active ads in this snapshot. It does not measure profitability or predict campaign results.</p>
+    </section>
+    <section id="pattern-examples" class="examples-section" aria-labelledby="examplesTitle">
+      <div class="section-heading"><div><p class="eyebrow">THE ADS BEHIND THE PATTERN</p><h2 id="examplesTitle">Study the actual examples.</h2></div><p>Pick an ad. Read its copy, classifications<br>and the visual evidence behind them.</p></div>
+      <div class="examples-toolbar">
+        <label>Pattern<select id="exampleDimension"><option value="format">Format</option><option value="hook">Hook</option><option value="offer">Offer</option></select></label>
+        <label>Group<select id="examplePattern" aria-label="Example group"></select></label>
+        <label class="examples-checkbox"><input type="checkbox" id="exampleOlder">60+ days only <span id="exampleOlderCount"></span></label>
+        <label>Order<select id="exampleSort"><option value="distinct">Distinct creatives first</option><option value="oldest">Oldest first</option><option value="newest">Newest first</option></select></label>
+      </div>
+      <div class="examples-summary"><h3 id="exampleScopeTitle"></h3><span id="exampleScopeCount" role="status"></span></div>
+      <div class="example-layout">
+        <div><div id="exampleGrid" class="example-grid" aria-label="Ads in this pattern"></div><div class="example-pagination"><button id="examplePrevious">← Previous</button><span id="examplePage"></span><button id="exampleNext">Next →</button></div></div>
+        <aside id="exampleDetail" class="example-detail" aria-label="Selected ad breakdown"></aside>
+      </div>
+    </section>
+    <section class="brief-panel" aria-labelledby="briefsTitle">
+      <div class="section-heading"><div><p class="eyebrow">FROM PATTERN TO PRODUCTION</p><h2 id="briefsTitle">Your next creative starts here.</h2></div><span id="briefCount">0 BRIEFS</span></div>
+      <p id="briefDescription">Original demo concepts. Three explicit review criteria.</p>
+      <div id="briefFeed"></div>
+    </section>
     <footer>
       <span id="disclosure"
         >SIMULATION · Fictional brands, synthetic dates, labels and scores.

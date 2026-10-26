@@ -1,37 +1,31 @@
 # Verification record
 
-Version 0.1.0, September 30, 2026. This is a local beta.
+## Native Jev image integration
 
-## Actually checked
+Checked for this release:
 
-- Dependency installation with the committed lockfile; npm audit reported zero vulnerabilities at installation.
-- JavaScript syntax checks.
-- Nine automated tests covering normalization, exact fingerprints, unknown dates, active/dated denominators, classification evidence boundaries, response validation, URL restrictions, no retry on an uncertain paid launch, Jev caching with a mock response, and explicit outline fallback.
-- Actual Tesseract.js English OCR on a generated PNG reading “NOTEBOOKS FOR YOUR NEXT IDEA / SHOP THE TWO PACK.” This proves the local OCR path works on clear text, not its accuracy on every ad.
-- Chromium checks of simultaneous demo progress, pause, pattern filtering, source dialog, desktop/portrait/mobile layouts and no horizontal overflow at 390 px.
-- No-key text import and classification failure with retained evidence.
-- Script-like source copy renders as text; a cross-origin write is rejected.
-- Verified the public image-pack command on five cached images with no paid calls and no duplicate files added.
-- Imported and compressed 2,136 distinct public creative image files locally (336 Meta images and 1,800 additional gallery images after exact-file deduplication). Multiple images can come from one ad.
-- A 20-second light-mode recording of the actual demo UI is included in `docs/demo.mp4`.
-- Reference / Light: 32 observed thumbnail crossings produced exactly 32 counter increments. Judgments, illustrative cost, brief counters, and graph arrivals follow the same scan events.
-- Verified changing pattern thumbnails/multiples, stat-card text bounds, pause stability, no browser errors, and smooth frame timing (about 9 ms at the 95th percentile on the development machine). These are local rendering checks, not Jev speed measurements.
+- The real TypeSafe image endpoint accepted one prepared image from the saved ad archive with copy and seven typed questions.
+- The response identified `jev-1.14.0` and returned seven classifications, 5,721 input tokens and an estimated input charge of $0.000240282 at $0.042 per million tokens. Local request elapsed time was 911 ms. This is one request, not an average or full-pipeline speed/cost estimate. Provider billing is authoritative.
+- The app sends multipart image assets with the documented opt-in header. No local OCR engine or separate OCR pass is installed.
+- Actual FFmpeg preparation is tested on a small image and a video. Frames meet the minimum 280-pixel side requirement; image conversion also handles even JPEG dimensions.
+- Tests cover image references, seven typed answers, omission of age/outcomes, in-flight request sharing, cache invalidation when pixels change, unknown token usage, and no automatic retry after an uncertain paid response.
+- Pipeline tests cover persistence, public frame URLs, sanitized exports, explicit provider switching, preserved historical costs, and saved-result reuse.
+- Findings, example browsing, copy breakdowns, thumbnail layouts and replay timing have automated coverage.
 
-## Implemented, not verified with paid live calls
+## Evidence boundaries
 
-- Apify Actor launch, polling, dataset import and attaching an existing run.
-- Jev live classification and brief scoring. Request shape and response parsing follow the provider's documented API; tests use mocked responses.
-- Fireworks / Groq speech transcription.
-- Optional OpenAI-compatible brief writing.
-- An end-to-end paid run combining these providers.
+The complete 1,214-record historical Hormozi archive has not been reanalysed with the new native Jev image integration. Its earlier labels and original provider/cost metadata remain preserved. The published visual is saved archive playback, not a live native Jev benchmark.
 
-Do not interpret a configured key, passing test or successful app installation as a successful real provider run. Start with five imported ads; inspect the evidence and labels. Then try a small collection and check actual billing.
+The live check above covers one image request. A newly paid Apify collection, new speech transcription and paid brief writing were not rerun for this release. Those are separate optional services with separate billing and access requirements.
 
-## Known limits
+The no-key demo and recording variants use synthetic fixtures. Fictional dates, costs, scores and labels are not measurements about the public inspiration images you may add locally.
 
-- One saved local batch. Imports replace it; export first.
-- English-only OCR, four sampled frames per video, no automatic visual reasoning model.
-- Family grouping is exact evidence fingerprinting, not perceptual or semantic deduplication.
-- An active snapshot cannot measure survival probability or profitability.
-- Demo analysis is synthetic, even when using real public artwork. It is not a benchmark or marketing case study.
-- Jev cost display estimates only known returned token usage, excluding other stages and lost responses.
+## Run locally
+
+```sh
+npm run check
+npm test
+npm run doctor
+```
+
+Doctor checks key presence and executable availability without printing secrets or making paid requests. It does not verify provider access. Start real research with a small batch and inspect the originals, labels, evidence and billing before scaling up.
