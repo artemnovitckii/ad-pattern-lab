@@ -3,6 +3,7 @@ import { resolve, join, extname } from "node:path";
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { imageInputOptions } from "../lib/media-input.mjs";
 const exec = promisify(execFile);
 const [input, recordFile] = process.argv.slice(2);
 if (!input) {
@@ -79,6 +80,7 @@ await Promise.all(
             "-y",
             "-v",
             "error",
+            ...imageInputOptions(bytes),
             "-i",
             f.path,
             "-vf",
